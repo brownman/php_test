@@ -1,8 +1,11 @@
 clear
 exec 2> >( tee /tmp/err )
-set -u
+set -o nounset
 trap trap_err ERR
-
+print_color(){
+print_color_n $@
+echo
+}
 
 where_am_i () 
 { 
@@ -14,17 +17,10 @@ where_am_i ()
   echo "$dir_self"
 }
 
-dir_self=`where_am_i $0`
-
-mkdir -p /tmp/1
-pushd /tmp/1  >/dev/null
-
-
-#str_caller='$(caller)'
-str_caller='eval echo $(caller)'
 
 set_env(){
   export file_list="$dir_self/list.sh"
+  export file_depend="$dir_self/depend.txt"
   export file_config="$dir_self/config.cfg"
   source $file_config
   type step1
@@ -51,24 +47,26 @@ print_color_n ()
   if [ $# -gt 1 ]; then
     local color=$1;
     shift;
-    local args="${@:-?}";
+    local args="${@:-}";
     echo -en "\x1B[01;${color}m[*]\x1B[0m ${args} " 1>&2;
   fi
 }
 indicator(){
   local num=$1
   if [ $num -ne 0 ];then
-    print_color_n 31 '[x]'
+    print_color_n 31 ''
+    #[x]'
   else
-    print_color_n 32 '[v]'
+    print_color_n 32 ''
+    #[v]'
   fi
   echo 1>&2
 }
 
 
 exiting(){
-  print_color_n 33 exiting
-  echo
+  print_color 33 exiting
+  
   $str_caller
   exit 0
 }
@@ -78,9 +76,8 @@ commander(){
   local cmd="${args[@]}"
   local res=1
   echo -----------
-  print_color_n  33  "[CMD] "
+  print_color_n  33  "[CMD] $cmd"
   #    echo "$cmd" | pv -qL 10
-  echo -n $cmd
   sleep 1
   eval "$cmd" 1>/tmp/out 2>/tmp/err || { cat1 /tmp/err; exiting; }
   res=$?
@@ -90,12 +87,15 @@ commander(){
 
 
 
-install(){
+ensure_depend(){
   #    sudo apt-get install pv
   #    apt-get source dh-make-php
   #    apt-get source libssh2-php
-  sudo apt-get install dh-make-php php5-dev build-essential libmagic-dev debhelper
-  sudo apt-get install libssh2-1 libssh2-1-dev
+  cmd='sudo apt-get install'
+  while read line;do
+    ( exec &>/dev/null; dpkg -L $line ) || ( print_color 33 'Installing missing dependencies'; eval "$cmd $line";  ) 
+  done <$file_depend
+
 }
 
 trap_err(){
@@ -133,9 +133,10 @@ url(){
 }
 stepper(){
   while read line;do
-    [ -n "$line" ] || exiting
-    commander "$(eval echo $line)"  || exiting
-  done< <(cat $file_list)
+    [ -n "$line" ] || { print_color_n 34 "\n\nempty line.." ; exiting; }
+    commander $(eval echo $line) 
+   # || exiting
+  done< $file_list
   # pecl search ssh2 
 }
 
@@ -144,17 +145,22 @@ show_funcs(){
   echo  =-=-=-=-=--
   nl < <( cat $0 | grep '(){' | grep -v grep | sed 's/(){//g' )
 }
-validate(){
-  test -f "$file_list"
-}
 
 steps(){
   set_env
-  validate
+  ensure_depend
   intro_start
   stepper
 }
-${1:-steps}
 
+dir_self=`where_am_i $0`
+
+mkdir -p /tmp/1
+pushd /tmp/1  >/dev/null
+
+#str_caller='$(caller)'
+str_caller='eval echo $(caller)'
+
+${1:-steps}
 
 popd >/dev/null
