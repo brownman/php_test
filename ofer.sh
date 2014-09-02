@@ -6,8 +6,8 @@ exec 2> >( tee /tmp/err )
 set -o nounset
 trap trap_err ERR
 print_color(){
-print_color_n $@
-echo
+  print_color_n $@
+  echo
 }
 
 where_am_i () 
@@ -22,6 +22,7 @@ where_am_i ()
 
 
 set_env(){
+  export MODE_VERBOSE=true
   export file_list="$dir_self/list.sh"
   export file_depend="$dir_self/depend.txt"
   export file_config="$dir_self/config.cfg"
@@ -69,7 +70,7 @@ indicator(){
 
 exiting(){
   print_color 33 exiting
-  
+
   $str_caller
   exit 0
 }
@@ -82,7 +83,12 @@ commander(){
   print_color_n  33  "[CMD] $cmd"
   #    echo "$cmd" | pv -qL 10
   sleep 1
-  eval "$cmd" 1>/tmp/out 2>/tmp/err || { cat1 /tmp/err; exiting; }
+  if [ "$MODE_VERBOSE"  = true ];then
+    eval "$cmd"
+  else
+    eval "$cmd" 1>/tmp/out 2>/tmp/err || { cat1 /tmp/err; exiting; }
+  fi
+
   res=$?
   indicator "$res"
 }
@@ -113,7 +119,7 @@ stepper(){
   while read line;do
     [ -n "$line" ] || { print_color_n 34 "\n\nempty line.." ; exiting; }
     commander $(eval echo $line) 
-   # || exiting
+    # || exiting
   done< $file_list
   # pecl search ssh2 
 }
