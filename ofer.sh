@@ -4,8 +4,9 @@
 clear
 exec 2> >( tee /tmp/err )
 set -o nounset
-set -e
+#set -e
 trap trap_err ERR
+
 print_color(){
   print_color_n $@
   echo
@@ -36,7 +37,9 @@ print_line(){
 }
 
 intro_start(){
-echo  $file_list
+env
+arch
+cat1 $file_list
 }
 cat1(){
   local file=$1

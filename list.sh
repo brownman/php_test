@@ -6,12 +6,11 @@ tree
 cat1 debian/control 
 head -10 debian/rules
 fakeroot ./debian/rules binary
+dpkg -c ../php5-${name1}_${ver1}-1_${arch_local}.deb
+dpkg -I ../php5-${name1}_${ver1}-1_${arch_local}.deb
 ls ../*.deb
 mv ../*.deb $dir_self/release
 
-
-dpkg -c ../php5-${name1}_${ver1}-1_${arch_local}.deb
-dpkg -I ../php5-${name1}_${ver1}-1_${arch_local}.deb
 
 
 
