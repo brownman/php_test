@@ -4,6 +4,7 @@
 clear
 exec 2> >( tee /tmp/err )
 set -o nounset
+set -e
 trap trap_err ERR
 print_color(){
   print_color_n $@
@@ -22,12 +23,11 @@ where_am_i ()
 
 
 set_env(){
-  export MODE_VERBOSE=true
   export file_list="$dir_self/list.sh"
   export file_depend="$dir_self/depend.txt"
   export file_config="$dir_self/config.cfg"
   source $file_config
-  type step1
+  set_package_details
 }
 
 
@@ -36,7 +36,7 @@ print_line(){
 }
 
 intro_start(){
-  cat1 $file_list
+echo  $file_list
 }
 cat1(){
   local file=$1
@@ -69,7 +69,7 @@ indicator(){
 
 
 exiting(){
-  print_color 33 exiting
+  print_color 31 exiting
 
   $str_caller
   exit 0
@@ -79,10 +79,11 @@ commander(){
   local args=( $@ )
   local cmd="${args[@]}"
   local res=1
-  echo -----------
-  print_color_n  33  "[CMD] $cmd"
-  #    echo "$cmd" | pv -qL 10
-  sleep 1
+  print_line
+  print_color_n  33  "[CMD] "
+      echo "$cmd" | pv -qL 10
+  print_line
+  sleep 2
   if [ "$MODE_VERBOSE"  = true ];then
     eval "$cmd"
   else
@@ -102,6 +103,7 @@ ensure_depend(){
   #    apt-get source libssh2-php
   cmd='sudo apt-get install'
   while read line;do
+      [ -n "$line" ] || { echo returning;  return; }
     ( exec &>/dev/null; dpkg -L $line ) || ( print_color 33 'Installing missing dependencies'; eval "$cmd $line";  ) 
   done <$file_depend
 
@@ -117,8 +119,8 @@ trap_err(){
 
 stepper(){
   while read line;do
-    [ -n "$line" ] || { print_color_n 34 "\n\nempty line.." ; exiting; }
-    commander $(eval echo $line) 
+    [ -n "$line" ] || { print_color_n 34 "\n\nempty line.." ; break; }
+    commander $(eval echo $line) || { print error; exiting; } 
     # || exiting
   done< $file_list
   # pecl search ssh2 
@@ -130,11 +132,17 @@ show_funcs(){
   nl < <( cat $0 | grep '(){' | grep -v grep | sed 's/(){//g' )
 }
 
+install(){
+commander sudo dpkg -i $dir_self/release/php5-${name1}_${ver1}-1_${arch}.deb
+dpkg -l | grep php5-${name1}
+}
+
 steps(){
   set_env
   ensure_depend
   intro_start
   stepper
+  install
 }
 
 dir_self=`where_am_i $0`

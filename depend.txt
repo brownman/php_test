@@ -1,7 +1,8 @@
+build-essential
+debhelper
+fakeroot
 dh-make-php 
 php5-dev
-build-essential
-libmagic-dev
-debhelper
 libssh2-1
 libssh2-1-dev
+tree

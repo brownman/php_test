@@ -1,14 +1,33 @@
-step1
-dh-make-pecl --phpversion 5 --prefix php5- ${name1}-${ver1}.tgz
-cd php5-${name1}-${ver1}/
+download_pecl_package
+dh-make-pecl
+dh-make-pecl1
+cd php-${name1}-${ver1}/
+tree
+cat1 debian/control 
+head -10 debian/rules
 fakeroot ./debian/rules binary
-dpkg -c ../php5-${name1}_${ver1}-1_${arch}.deb
-dpkg -I ../php5-${name1}_${ver1}-1_${arch}.deb
+ls ../*.deb
+mv ../*.deb $dir_self/release
 
 
-#later1
-dpkg -i ../php5-${name1}_${ver1}-1_${arch}.deb
-dpkg -l | grep php5-${name1}
+dpkg -c ../php5-${name1}_${ver1}-1_${arch_local}.deb
+dpkg -I ../php5-${name1}_${ver1}-1_${arch_local}.deb
+
+
+
+
+ls $dir_self
+
+
+mv $dir_parent/*.deb $dir_parent/release
+
+mv /tmp/1 /tmp/$(date +%s)
+
+dpkg-buildpackage -rfakeroot
+
+pwd
+
+echo sed -i 's/any/amd64/1' debian/control
 
 #later2
 echo 'Install PHP-SSH2 ( php-ssh ) extension'

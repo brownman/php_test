@@ -1,5 +1,5 @@
 before_install:
-- sudo apt-get install -y dh-make-php   php5-dev   build-essential    debhelper   libssh2-1   libssh2-1-dev
+- sudo apt-get install -y dh-make-php   php5-dev   build-essential    debhelper   libssh2-1   libssh2-1-dev tree fakeroot
 
 language: bash
 git:
