@@ -1,7 +1,7 @@
 download_pecl_package
 dh-make-pecl
 dh-make-pecl1
-cd php-${name1}-${ver1}/
+cd php*-${name1}-${ver1}/
 tree
 cat1 debian/control 
 head -10 debian/rules

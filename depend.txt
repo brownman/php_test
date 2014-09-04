@@ -6,3 +6,4 @@ php5-dev
 libssh2-1
 libssh2-1-dev
 tree
+php5-cli
