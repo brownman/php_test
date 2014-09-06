@@ -52,5 +52,4 @@ apt-cache search dh_make
 
 ```
 
-[demo](http://asciinema.org/a/11943)
 [demo](http://asciinema.org/a/12010)
