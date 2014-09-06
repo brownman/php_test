@@ -62,7 +62,8 @@ trap_err(){
 stepper(){
   while read line;do
     [ -n "$line" ] || { print_color_n 34 "\n\nempty line.." ; break; }
-    commander1 $(eval echo $line) || { print error; exiting; } 
+    commander1 $(eval echo $line)
+    #|| { print error; exiting; } 
     # || exiting
   done< $file_list
   # pecl search ssh2 
