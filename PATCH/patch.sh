@@ -1,6 +1,10 @@
 #https://linuxacademy.com/blog/linux/introduction-using-diff-and-patch/
 
 #http://www.cyberciti.biz/faq/appy-patch-file-using-patch-command/
+$cmd_trap_err
+$cmd_trap_exit
+
+
 set_env(){
     dir_self=.
     file_old=/tmp/hello
@@ -15,12 +19,12 @@ set_env(){
 
 prepare_diff(){
     #set +e
-    trap - ERR
+    #trap - ERR
     local     cmd1='diff -u'
     local     cmd2='diff -c'
     local    cmd="$cmd1"
-    ( commander "$cmd $file_old $file_new > $patch" )
-    echo
+    ( set +e; commander "$cmd $file_old $file_new > $patch" )
+    echo bye
     
 }
 
@@ -68,11 +72,8 @@ steps(){
     clear
     set -u
     #set -e
-    source ../helper.cfg
-    #$cmd_trap_err
-    #$cmd_trap_exit
-
-    #set -x
+    source helper.cfg
+        #set -x
 
     set -i
     set_env

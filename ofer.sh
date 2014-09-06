@@ -33,7 +33,7 @@ set_env(){
 }
 
 intro_start(){
-env
+env | grep LOGNAME
 arch
 cat1 $file_list
 }

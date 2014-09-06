@@ -1,3 +1,4 @@
+$dir_self/PATCH/patch.sh
 cd $dir_parent
 download_pecl_package
 dh-make-pecl
@@ -14,8 +15,6 @@ file_package=$dir_parent/php5-${name1}_${ver1}-1_${arch}.deb
 dpkg -c $file_package
 dpkg -I $file_package
 mv $file_package  $dir_self/release
-
-
 
 dpkg -i $file_package
 dpkg -l | grep ssh
