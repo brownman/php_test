@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <title>Php test by brownman</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Php test</h1>
+        <h2>packaging php for debian</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/brownman/php_test/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/brownman/php_test/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/brownman/php_test" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h2>
+<a name="php-test" class="anchor" href="#php-test"><span class="octicon octicon-link"></span></a>php test</h2>
+
+<ul>
+<li>god bless</li>
+</ul><p><a href="https://travis-ci.org/brownman/php_test"><img src="https://travis-ci.org/brownman/php_test.svg?branch=master" alt="Build Status"></a></p>
+
+<h2>
+<a name="release" class="anchor" href="#release"><span class="octicon octicon-link"></span></a>release</h2>
+
+<p>(deb amd64)<a href="deb%20i386">./release/amd64.deb</a>[./release/i386.deb]</p>
+
+<h1>
+<a name="summary-review-of-steps-taken-for-accomplish-the-task-still-incomplete-" class="anchor" href="#summary-review-of-steps-taken-for-accomplish-the-task-still-incomplete-"><span class="octicon octicon-link"></span></a>Summary: review of steps taken for accomplish the task( still incomplete )</h1>
+
+<pre><code>#visit: #http://www.mabishu.com/blog/2011/03/20/how-to-easily-create-debian-packages-for-php-extensions/
+#query: apt-cache search php ssh2
+#found: libssh2-php - PHP Bindings for libssh2
+#run:   apt-get source libssh2-php
+#query: apt-cache search dh_make
+#found: pkg-php-tools - various packaging tools and scripts for PHP PEAR packages
+#run:   apt-get source pkg-php-tools
+#query: searching after a diff tool:
+#visit: http://www.commandlinefu.com/commands/matching/diff/ZGlmZg==/sort-by-votes
+#found: diff -r -u $dir1 $dir2 &gt; $file
+#query: I try to find the differents between the code generated with dh-make-pecl and the package: libssh2-php
+#Results:
++Source: php-ssh2
++Section: devel
++Priority: extra
++Maintainer: Martin Meredith &lt;mez@debian.org&gt;
++Uploaders: Lior Kaplan &lt;kaplan@debian.org&gt;
++Build-Depends: debhelper (&gt;= 7), php5-dev, libssh2-1-dev, libtool
++Standards-Version: 3.9.4
++Homepage: http://pecl.php.net/package/ssh2
+-Package: php5-ssh2
++Package: libssh2-php
+#I have used some of these params( such as: libssh2-1-dev ) as an input for: dh-make-pecl
+#- but it complained -  so I gave it less params + overrided the file: debian/control with a pre-made file
+#I built the .deb package using the Makefile script: ./debian/rules
+#And installed it to the system using: dpkg
+
+</code></pre>
+
+<h1>
+<a name="done" class="anchor" href="#done"><span class="octicon octicon-link"></span></a>done:</h1>
+
+<ul>
+<li>create a .deb package</li>
+<li>ci-testing: using travis</li>
+<li>screencast: using asciiema</li>
+</ul><h1>
+<a name="todo" class="anchor" href="#todo"><span class="octicon octicon-link"></span></a>todo:</h1>
+
+<ul>
+<li>use debian upstream branch for getting the latest changes + create a patch and apply it during the build process</li>
+<li>use php5-cli for loading the ssh2 module/extension</li>
+<li>play with php-config / .ini  configuration/environment for inspecting the loaded version of ssh2</li>
+</ul><p><a href="http://asciinema.org/a/12010">demo</a></p>
+      </section>
+    </div>
+
+    
+  </body>
+</html>
