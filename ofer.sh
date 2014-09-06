@@ -2,6 +2,7 @@
 #  https://extremeshok.com/5280/ubuntu-debian-install-php-ssh2-php-ssh-extension/
 
 clear
+
 exec 2> >( tee /tmp/err )
 set -o nounset
 #set -e
@@ -55,14 +56,14 @@ trap_err(){
   echo  "[ $FUNCNAME ]"
   $str_caller
   cat /tmp/err
-  exit 0
+  exit 
 }
 
 
 stepper(){
   while read line;do
     [ -n "$line" ] || { print_color_n 34 "\n\nempty line.." ; break; }
-    commander1 $(eval echo $line)
+    ( set -e; commander1 "$(eval echo $line)" ) || break
     #|| { print error; exiting; } 
     # || exiting
   done< $file_list
@@ -71,17 +72,12 @@ stepper(){
 
 
 
-install(){
-commander sudo dpkg -i $dir_self/release/php5-${name1}_${ver1}-1_${arch}.deb
-dpkg -l | grep php5-${name1}
-}
 
 steps(){
   set_env
   ensure_depend
   intro_start
   stepper
-  install
 }
 
 dir_self=`where_am_i $0`
