@@ -35,8 +35,6 @@ apt-cache search dh_make
 #http://www.commandlinefu.com/commands/matching/diff/ZGlmZg==/sort-by-votes
 #found:
 #diff -r -u $dir1 $dir2 > $file
-#cheating:
-$dir1/debian $dir2/debian > result.patch
 #I try to find the differents between the code generated with dh-make-pecl and the package: libssh2-php
 #results:
 +Source: php-ssh2

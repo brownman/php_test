@@ -95,4 +95,5 @@ cmd_start=${1:-steps}
 $cmd_start
 install
 commander cleanup_tmp
+commander cleanup_dpkg
 #popd >/dev/null
