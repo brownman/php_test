@@ -63,7 +63,7 @@ trap_err(){
 stepper(){
   while read line;do
     [ -n "$line" ] || { print_color_n 34 "\n\nempty line.." ; break; }
-    ( set -e; commander1 "$(eval echo $line)" ) || break
+     set -e; commander1 "$(eval echo $line)"  || break
     #|| { print error; exiting; } 
     # || exiting
   done< $file_list
@@ -77,17 +77,19 @@ steps(){
   set_env
   ensure_depend
   intro_start
-  stepper
+  (   stepper )
+  echo
 }
 
 dir_self=`where_am_i $0`
 
 mkdir -p /tmp/1
-pushd /tmp/1  >/dev/null
-
+#pushd /tmp/1  >/dev/null
+dir_parent=/tmp/1
 #str_caller='$(caller)'
 str_caller='eval echo $(caller)'
 
-${1:-steps}
-
-popd >/dev/null
+cmd_start=${1:-steps}
+$cmd_start
+cleanup_tmp
+#popd >/dev/null

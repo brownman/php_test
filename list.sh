@@ -1,14 +1,26 @@
+cd $dir_parent
 download_pecl_package
 dh-make-pecl
-dh-make-pecl1
-ls -l 
-cd php*-${name1}-${ver1}/
-tree
-cat1 debian/control 
-head -10 debian/rules
+dh-make-pecl_use
+dir_generated=$dir_parent/php5-${name1}-${ver1}
+tree $dir_generated
+cat1 $dir_generated/debian/control 
+cp $dir_self/control $dir_generated/debian/control
+cat1 $dir_generated/debian/control 
+sleep 10
+cd $dir_generated
 fakeroot ./debian/rules binary
-dpkg -c ../php5-${name1}_${ver1}-1_${arch_local}.deb
-dpkg -I ../php5-${name1}_${ver1}-1_${arch_local}.deb
+dpkg -c $dir_parent/php5-${name1}_${ver1}-1_${arch}.deb
+dpkg -I $dir_parent/php5-${name1}_${ver1}-1_${arch}.deb
+install
+cleanup_tmp
+cleanup_dpkg
+
+
+
+
+head -10 debian/rules
+
 ls ../*.deb
 mv ../*.deb $dir_self/release
 install
