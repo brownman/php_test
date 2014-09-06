@@ -61,11 +61,13 @@ trap_err(){
 
 
 stepper(){
+let     counter=1
   while read line;do
     [ -n "$line" ] || { print_color_n 34 "\n\nempty line.." ; break; }
      set -e; commander1 "$(eval echo $line)"  || break
     #|| { print error; exiting; } 
     # || exiting
+let     counter+=1
   done< $file_list
   # pecl search ssh2 
 }
@@ -91,5 +93,6 @@ str_caller='eval echo $(caller)'
 
 cmd_start=${1:-steps}
 $cmd_start
-#cleanup_tmp
+install
+commander cleanup_tmp
 #popd >/dev/null

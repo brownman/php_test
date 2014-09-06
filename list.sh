@@ -10,9 +10,16 @@ cat1 $dir_generated/debian/control
 sleep 10
 cd $dir_generated
 fakeroot ./debian/rules binary
-dpkg -c $dir_parent/php5-${name1}_${ver1}-1_${arch}.deb
-dpkg -I $dir_parent/php5-${name1}_${ver1}-1_${arch}.deb
-install
+file_package=$dir_parent/php5-${name1}_${ver1}-1_${arch}.deb
+dpkg -c $file_package
+dpkg -I $file_package
+
+dpkg -i $file_package
+
+dpkg -l | grep ssh
+dpkg -P $file_package
+#install
+
 cleanup_tmp
 cleanup_dpkg
 
