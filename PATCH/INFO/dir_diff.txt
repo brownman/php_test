@@ -1,0 +1,14 @@
+A note about working on an entire source tree
+
+First, make a copy of the source tree:
+## Original source code is in lighttpd-1.4.35/ directory ##
+$ cp -R lighttpd-1.4.35/ lighttpd-1.4.35-new/
+Cd to lighttpd-1.4.35-new directory and make changes as per your requirements:
+$ cd lighttpd-1.4.35-new/
+$ vi geoip-mod.c
+$ vi Makefile
+Finally, create a patch with the following command:
+$ cd ..
+$ diff -rupN lighttpd-1.4.35/ lighttpd-1.4.35-new/ > my.patch
+You can use my.patch file to patch lighttpd-1.4.35 source code on a different computer/server using patch command as discussed above:
+patch -p1 < my.patch

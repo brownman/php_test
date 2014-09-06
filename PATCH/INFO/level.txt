@@ -1,0 +1,14 @@
+#http://www.cyberciti.biz/faq/appy-patch-file-using-patch-command/
+
+-p0 in patch command –> entire file name
+-p1 in patch command –> file name preceding first forward slash
+-p2 in patch command –> file name preceding second forward slash
+etc.
+Example:
+-p0 = /path/to/patch/file
+-p1 = path/to/patch/file
+-p2 = to/patch/file
+-p3 = patch/file
+-p4 = file
+
+
