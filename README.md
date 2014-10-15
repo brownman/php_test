@@ -8,8 +8,8 @@ php test
 
 release
 -----
-(deb amd64)[./release/amd64.deb]
-(deb i386)[./release/i386.deb]
+[deb amd64](./release/amd64.deb)
+[deb i386](./release/i386.deb)
 
 Summary: review of steps taken for accomplish the task( still incomplete )
 ====
